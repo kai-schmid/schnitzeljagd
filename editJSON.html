@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/editJSON.css">
+    <script defer src="js/editJSON.js"></script>
+    <title>JSON Editor</title>
+    
+</head>
+
+<body>
+    <h1>JSON Editor</h1>
+
+    <input type="file" id="fileInput" accept=".json">
+    <button onclick="loadJson()">JSON hochladen</button>
+
+    <div>
+        <label for="question">Frage:</label>
+        <input type="text" id="question">
+    </div>
+
+    <div>
+        <label for="latitude">Breitengrad:</label>
+        <input type="number" id="latitude">
+    </div>
+
+    <div>
+        <label for="longitude">Längengrad:</label>
+        <input type="number" id="longitude">
+    </div>
+
+    <div>
+        <label for="answers">Antworten (durch Kommas getrennt):</label>
+        <input type="text" id="answers">
+    </div>
+
+    <div>
+        <label for="answerType">Antworttyp:</label>
+        <select id="answerType">
+            <option value="text">Text</option>
+            <option value="multipleChoice">Multiple Choice</option>
+        </select>
+    </div>
+
+    <button onclick="addToJsonArray()">Hinzufügen</button>
+    <p id="errorText" class="error-text"></p>
+
+    <div id="jsonList">
+        <!-- Hier werden die JSON-Boxen angezeigt -->
+    </div>
+
+    <details>
+        <summary>JSON-Output:</summary>
+        <pre id="jsonOutput"></pre>
+    </details>
+
+    <button onclick="downloadJson()">JSON herunterladen</button>
+</body>
+
+</html>

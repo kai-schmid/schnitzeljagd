@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "name": "schnitzeljagt",
+  "version": "1.0.0",
+  "description": "Eine kleines tool um schnitzeljakten zu digitalisieren",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kai Schmid",
+  "license": "Apache-2.0"
+}

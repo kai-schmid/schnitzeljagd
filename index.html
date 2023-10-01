@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="js/index.js"></script>
+    <title>Schatzsuche</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #header {
+            text-align: center;
+            padding: 20px;
+        }
+
+        #image {
+            max-width: 100%;
+        }
+
+        #question {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        #answer-input {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        #result {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header">
+        <h1>Schatzsuche</h1>
+    </div>
+
+    <div id="image">
+        <img src="pfad_zum_bild.jpg" alt="Bild der Schatzsuche">
+    </div>
+
+    <div id="question">
+        <p>Hier ist deine Frage:</p>
+        <p>Was ist die Hauptstadt von Deutschland?</p>
+    </div>
+
+    <div id="answer-input">
+        <label for="answer">Antwort eingeben:</label>
+        <div id="input">
+
+        </div>
+        <div id="result">
+            <p id="message"></p>
+        </div>
+        <div id="button">
+            <button onclick="checkAnswer()">Antwort überprüfen</button>
+        </div>
+    </div>
+
+    
+</body>
+
+</html>

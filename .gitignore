@@ -1,0 +1,26 @@
+# Ignoriere node_modules, da sie in der Regel nicht im Repository gespeichert werden sollten.
+node_modules/
+
+# Ignoriere npm's Debug-Log-Dateien
+npm-debug.log
+
+# Ignoriere Dateien für den Anwendungssecrets
+.env
+
+# Ignoriere Dateien, die beim Entwickeln generiert werden (z.B. Core-Dumps)
+*.log
+*.swp
+
+# Ignoriere VS Code Konfigurationsdateien
+.vscode/
+
+# Ignoriere IDE-spezifische Dateien
+.idea/
+
+# Ignoriere macOS spezifische Dateien
+.DS_Store
+
+# Ignoriere generierte oder kompilierte Dateien
+/build/
+/dist/
+/public/
