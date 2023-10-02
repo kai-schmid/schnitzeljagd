@@ -1,5 +1,18 @@
+var json = {
+    userId: null,
+    name: null,
+    id: null,
+    jsonArray: []
+}
+var jsonArray = json.jsonArray;
 
-const jsonArray = [];
+init();
+function init() {
+    // JSON-Objekt aus dem DOM abrufen
+    json = JSON.parse(document.getElementById('json-data').textContent);
+    jsonArray = json.jsonArray;
+    document.getElementById("name").innerText = json.name;
+}
 
 function addToJsonArray() {
     const question = document.getElementById("question").value;
@@ -155,15 +168,34 @@ function loadJson() {
             const jsonContent = event.target.result;
             try {
                 const parsedJson = JSON.parse(jsonContent);
+                validateJSON(parsedJson);
+
                 jsonArray.push(...parsedJson);
                 displayJsonList();
             } catch (error) {
+                errorText.textContent = "Fehler beim Parsen der JSON-Datei." + error;
                 alert("Fehler beim Parsen der JSON-Datei.");
             }
         };
         reader.readAsText(file);
     }
+
+    function validateJSON(parsedJson) {
+        if (Array.isArray(parsedJson)) {
+            parsedJson.forEach(element => {
+                if (element.question != undefined && element.coordinates != undefined && element.answers != undefined && element.answerType != undefined &&
+                    element.question != null && element.coordinates != null && element.answers != null && element.answerType != null) {
+                        if (!element.question || !element.answers || isNaN(element.coordinates.latitude) || isNaN(element.coordinates.longitude)) {
+                            throw new Error("JSON-Datei: Nicht alle Felder korrekt ausgefüllt.");
+                        } else if (element.coordinates.latitude < -90 || element.coordinates.latitude > 90 || element.coordinates.longitude < -180 || element.coordinates.longitude > 180) {
+                            throw new Error("JSON-Datei: Breitengrad muss zwischen -90 und 90 liegen, Längengrad zwischen -180 und 180.");
+                        }
+                } else throw new Error("JSON-Datei enthält nicht alle benötigten Informationen.");
+            });
+        } else throw new Error("JSON-Datei enthält kein Array.");
+    }
 }
+
 
 function downloadJson() {
     const jsonContent = JSON.stringify(jsonArray, null, 2);

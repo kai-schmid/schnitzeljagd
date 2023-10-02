@@ -58,8 +58,7 @@ button:hover {
     position: relative;
 }
 
-details,
-#jsonOutput {
+details{
     margin-top: 20px;
     white-space: pre-wrap;
     border: 1px solid #ddd;
@@ -70,4 +69,7 @@ details,
 .error-text {
     color: red;
     margin-top: 5px;
+}
+#json-data{
+    display: none;
 }

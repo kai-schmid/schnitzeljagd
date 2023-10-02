@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/editJSON.css">
-    <script defer src="js/editJSON.js"></script>
+    <link rel="stylesheet" href="../style/editJSON.css">
+    <script defer src="../js/editJSON.js"></script>
     <title>JSON Editor</title>
-    
+
 </head>
 
 <body>
-    <h1>JSON Editor</h1>
+    <h1 id="name">JSON Editor</h1>
 
     <input type="file" id="fileInput" accept=".json">
     <button onclick="loadJson()">JSON hochladen</button>
@@ -57,6 +57,11 @@
     </details>
 
     <button onclick="downloadJson()">JSON herunterladen</button>
+
+    <pre id="json-data"><%= jsonData %></pre>
 </body>
+<footer>
+    <%- include('partials/footer'); %>
+</footer>
 
 </html>

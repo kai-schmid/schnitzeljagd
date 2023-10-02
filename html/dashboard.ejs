@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Viewer and Editor</title>
+    <link rel="stylesheet" href="../style/dashboard.css">
+    <script defer src="../js/dashboard.js"></script>
+</head>
+<body>
+    <h1>JSON Viewer and Editor</h1>
+    <h2>Hi, <%= user %>!</h2>
+    <div id="jsonList">
+        
+    </div>
+    <input type="text" id="gameName" placeholder="Name des neuen Spiels?">
+    <button onclick="addElement()">Neues Spiel erstellen</button>
+</body>
+<footer>
+    <%- include('partials/footer'); %>
+</footer>
+</html>
+
