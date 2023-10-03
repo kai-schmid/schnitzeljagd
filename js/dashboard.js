@@ -30,13 +30,14 @@ function generateList() {
                     <div>
                         Name: ${element.name}
                     </div>
-                    <button onclick="edit(${index}, ${element._id})">Bearbeiten</button>
-                    <button onclick="deleteGame(${index}, ${element._id})">Löschen</button>
+                    <button onclick="edit(${index},'${element._id}');">Bearbeiten</button>
+                    <button onclick="deleteGame(${index},'${element._id}')">Löschen</button>
                 `;
         jsonList.appendChild(div);
     });
 }
 function edit(index, id) {
+    console.log("Element wird "+ index +" bearbeitet.");
     window.location.href = "/html/editJSON?id=" + id;
 }
 function deleteGame(index, id) {

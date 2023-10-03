@@ -47,21 +47,21 @@ app.get('/login', (req, res) => {
 
 // Route to Dashboard
 app.get('/dashboard', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  
-  Dataset.find({ user: req.user._id },{name:1, user:1, _id:1}).then((dataset) => {
+
+  Dataset.find({ user: req.user._id }, { name: 1, user: 1, _id: 1 }).then((dataset) => {
     var jsonData = [];
-    if(dataset.length > 0){
+    if (dataset.length > 0) {
       jsonData = dataset;
     }
-    else{
+    else {
       jsonData = [];
     }
     const jsonDataString = JSON.stringify(jsonData);
-    res.render(__dirname + '/html/dashboard', { user: req.user.username, session: req.session, sessionID: req.sessionID, jsonData: jsonDataString});
+    res.render(__dirname + '/html/dashboard', { user: req.user.username, session: req.session, sessionID: req.sessionID, jsonData: jsonDataString });
   }).catch((err) => {
     console.log(err);
     const jsonDataString = "[]";
-    res.render(__dirname + '/html/dashboard', { user: req.user.username, session: req.session, sessionID: req.sessionID, jsonData: jsonDataString});
+    res.render(__dirname + '/html/dashboard', { user: req.user.username, session: req.session, sessionID: req.sessionID, jsonData: jsonDataString });
   });
 });
 
@@ -118,10 +118,25 @@ app.get('/html/editJson', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
       }
     ]
   }
-  // Die JSON-Daten als Zeichenfolge in das HTML-Dokument einfügen
-  const jsonDataString = JSON.stringify(jsonData);
-  // Die render-Methode übergibt die Zeichenfolge an die HTML-Seite
-  res.render(__dirname +'/html/editJson', { jsonData: jsonDataString });
+  Dataset.findById(req.query.id).then((dataset) => {
+    if (dataset != null) {
+      jsonData = {
+        name: dataset.name,
+        userId: dataset.user,
+        _id: dataset._id,
+        jsonArray: dataset.jsonArray
+      };
+      // Die JSON-Daten als Zeichenfolge in das HTML-Dokument einfügen
+      const jsonDataString = JSON.stringify(jsonData);
+      // Die render-Methode übergibt die Zeichenfolge an die HTML-Seite
+      res.render(__dirname + '/html/editJson', { jsonData: jsonDataString });
+    } else {
+      res.redirect('/dashboard');
+    }
+  }).catch((err) => {
+    console.log(err);
+    res.redirect('/dashboard');
+  });
 });
 
 app.get('/api/newDataset', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
@@ -155,10 +170,20 @@ app.post('/api/saveDataset', connectEnsureLogin.ensureLoggedIn(), (req, res) => 
   });
 });
 
+app.delete('/api/deleteDataset', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  const dataset = req.body;
+  Dataset.deleteOne({ _id: dataset.id }).then((result) => {
+    res.sendStatus(200);
+  }).catch((err) => {
+    console.log(err);
+    res.sendStatus(500);
+  });
+});
+
 app.get('/js/editJson.js', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   res.sendFile(__dirname + '/js/editJson.js');
 });
-app.get('/style/editJson.css',connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+app.get('/style/editJson.css', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   res.sendFile(__dirname + '/style/editJson.css');
 });
 
