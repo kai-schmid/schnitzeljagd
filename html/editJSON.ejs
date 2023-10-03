@@ -33,16 +33,25 @@
     </div>
 
     <div>
-        <label for="answers">Antworten (durch Kommas getrennt):</label>
+        <label for="answerType">Antworttyp:</label>
+        <select id="answerType" onchange="changeAnswerType(this.value);">
+            <option value="text">Text</option>
+            <option value="multipleChoice">Multiple Choice</option>
+            <option value="number">Zahl</option>
+            <option value="date">Datum</option>
+            <option value="time">Uhrzeit</option>
+            <option value="datetime-local">Datum und Uhrzeit</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="answers">Antworten (durch Kommas getrennt: nur Text und Multiple Choice!):</label>
         <input type="text" id="answers">
     </div>
 
     <div>
-        <label for="answerType">Antworttyp:</label>
-        <select id="answerType">
-            <option value="text">Text</option>
-            <option value="multipleChoice">Multiple Choice</option>
-        </select>
+        <label for="radiusMeters">Radius in Metern:</label>
+        <input type="number" id="radiusMeters">
     </div>
 
     <button onclick="addToJsonArray()">Hinzufügen</button>

@@ -22,9 +22,10 @@ function addToJsonArray() {
     const longitude = parseFloat(longitudeText);
     const answers = document.getElementById("answers").value.split(",");
     const answerType = document.getElementById("answerType").value;
+    const radiusMeters = document.getElementById("radiusMeters").value;
 
     // Validierung der Eingaben
-    if (!validateInputs(question, answers, latitude, longitude)) {
+    if (!validateInputs(question, answers, latitude, longitude, radiusMeters)) {
         return;
     }
 
@@ -32,7 +33,8 @@ function addToJsonArray() {
         question,
         coordinates: { latitude, longitude },
         answers,
-        answerType
+        answerType,
+        radiusMeters
     };
 
     jsonArray.push(newElement);
@@ -49,12 +51,12 @@ function addToJsonArray() {
 }
 
 
-function validateInputs(question, answers, latitude, longitude) {
+function validateInputs(question, answers, latitude, longitude, radiusMeters) {
     let isValid = true;
     const errorText = document.getElementById("errorText");
     errorText.textContent = "";
 
-    if (!question || !answers || isNaN(latitude) || isNaN(longitude)) {
+    if (!question || !answers || isNaN(latitude) || isNaN(longitude) || isNaN(radiusMeters)) {
         errorText.textContent = "Bitte füllen Sie alle Felder korrekt aus.";
         isValid = false;
     } else if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
@@ -89,6 +91,9 @@ function displayJsonList() {
                     <div>
                         Antworten: ${element.answers.join(", ")}
                     </div>
+                    <div>
+                        Radius: ${element.radiusMeters} Meter
+                    </div>
                     <button onclick="editJson(${index})">Bearbeiten</button>
                     <button onclick="deleteJson(${index})">Löschen</button>
                 `;
@@ -108,6 +113,7 @@ function editJson(index) {
     const longitudeDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(3)`);
     const answersDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(4)`);
     const answerTypeDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(5)`);
+    const answerRadiusMetersDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(6)`);
 
     questionDiv.innerHTML = `<input type="text" id="editedQuestion" value="${element.question}">`;
     latitudeDiv.innerHTML = `<input type="text" id="editedLatitude" value="${element.coordinates.latitude}">`;
@@ -119,8 +125,9 @@ function editJson(index) {
                 <option value="multipleChoice" ${element.answerType === "multipleChoice" ? "selected" : ""}>Multiple Choice</option>
             </select>
         `;
+    answerRadiusMetersDiv.innerHTML = `<input type="number" id="editedRadiusMeters" value="${element.radiusMeters}">`;
 
-    const editButton = document.querySelector(`#jsonList div:nth-child(${index + 1}) button:nth-child(6)`);
+    const editButton = document.querySelector(`#jsonList div:nth-child(${index + 1}) button:nth-child(7)`);
     editButton.innerHTML = "Speichern";
     editButton.onclick = saveJson;
 }
@@ -133,12 +140,14 @@ function saveJson() {
     const editedLongitude = document.getElementById("editedLongitude").value;
     const editedAnswers = document.getElementById("editedAnswers").value.split(",");
     const editedAnswerType = document.getElementById("editedAnswerType").value;
+    const editedRadiusMeters = document.getElementById("editedRadiusMeters").value;
 
     const editedElement = {
         question: editedQuestion,
         coordinates: { latitude: editedLatitude, longitude: editedLongitude },
         answers: editedAnswers,
-        answerType: editedAnswerType
+        answerType: editedAnswerType,
+        radiusMeters: editedRadiusMeters
     };
 
     jsonArray[editingIndex] = editedElement;
@@ -186,11 +195,11 @@ function loadJson() {
             parsedJson.forEach(element => {
                 if (element.question != undefined && element.coordinates != undefined && element.answers != undefined && element.answerType != undefined &&
                     element.question != null && element.coordinates != null && element.answers != null && element.answerType != null) {
-                        if (!element.question || !element.answers || isNaN(element.coordinates.latitude) || isNaN(element.coordinates.longitude)) {
-                            throw new Error("JSON-Datei: Nicht alle Felder korrekt ausgefüllt.");
-                        } else if (element.coordinates.latitude < -90 || element.coordinates.latitude > 90 || element.coordinates.longitude < -180 || element.coordinates.longitude > 180) {
-                            throw new Error("JSON-Datei: Breitengrad muss zwischen -90 und 90 liegen, Längengrad zwischen -180 und 180.");
-                        }
+                    if (!element.question || !element.answers || isNaN(element.coordinates.latitude) || isNaN(element.coordinates.longitude)) {
+                        throw new Error("JSON-Datei: Nicht alle Felder korrekt ausgefüllt.");
+                    } else if (element.coordinates.latitude < -90 || element.coordinates.latitude > 90 || element.coordinates.longitude < -180 || element.coordinates.longitude > 180) {
+                        throw new Error("JSON-Datei: Breitengrad muss zwischen -90 und 90 liegen, Längengrad zwischen -180 und 180.");
+                    }
                 } else throw new Error("JSON-Datei enthält nicht alle benötigten Informationen.");
             });
         } else throw new Error("JSON-Datei enthält kein Array.");
@@ -221,7 +230,7 @@ function saveDataset() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            
+
         },
         body: JSON.stringify(json)
     }).then((res) => {
@@ -234,6 +243,14 @@ function saveDataset() {
         console.log(err);
         alert("Fehler beim Speichern");
     });
+}
+
+function changeAnswerType(value){
+    if(value == "multipleChoice"){
+        document.getElementById("answers").placeholder = "Antworten durch Komma getrennt";
+        value = "text";
+    }
+    document.getElementById("answers").type = value;
 }
 
 // Anzeigen der vorhandenen Informationen beim Laden der Seite

@@ -4,8 +4,10 @@ const session = require('express-session');  // session middleware
 const passport = require('passport');  // authentication
 const connectEnsureLogin = require('connect-ensure-login');// authorization
 
+// Database
 const User = require('./express/user'); // User Model
 const Dataset = require('./express/dataset'); // Dataset Model
+const Position = require('./express/position'); // Position Model
 
 const app = express();
 
@@ -100,24 +102,6 @@ app.post('/register', (req, res) => {
   });
 });
 app.get('/html/editJson', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  var jsonData = {
-    name: "test",
-    userId: 123,
-    _id: null,
-    jsonArray: [
-      {
-        "question": "test",
-        "coordinates": {
-          "latitude": 1,
-          "longitude": 1
-        },
-        "answers": [
-          "test"
-        ],
-        "answerType": "text"
-      }
-    ]
-  }
   Dataset.findById(req.query.id).then((dataset) => {
     if (dataset != null) {
       jsonData = {
@@ -151,8 +135,15 @@ app.get('/api/newDataset', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
     _id: dataset._id,
     jsonArray: dataset.jsonArray
   };
+  const position = new Position({
+    datasetId: dataset._id,
+    position: 0
+  });
   dataset.save().then((dataset) => {
-    res.render(__dirname + '/html/editJson', { jsonData: JSON.stringify(jsonData) });
+    position.save().then((position) => { }).catch((err) => { }).finally(() => {
+      res.render(__dirname + '/html/editJson', { jsonData: JSON.stringify(jsonData) });
+    });
+
   }).catch((err) => {
     console.log("New Datset error: " + err);
     res.redirect('/dashboard');
@@ -189,6 +180,88 @@ app.get('/style/editJson.css', connectEnsureLogin.ensureLoggedIn(), (req, res) =
 
 app.get('/style/index.css', (req, res) => {
   res.sendFile(__dirname + '/style/index.css');
+});
+
+app.get('/api/answer', (req, res) => {
+  Dataset.findById(req.query.id).then((dataset) => {
+    Position.findOne({ datasetId: dataset._id }).then((position) => {
+      let rightAnswer = false;
+      if (position != null) {
+        dataset.jsonArray.forEach(element => {
+          if (element.answer.toLocaleLowerCase().replace(/\s+/g, "") = req.query.answer.toLocaleLowerCase().replace(/\s+/g, "")) {
+            rightAnswer = true;
+          }
+        });
+        if (rightAnswer) {
+          Position.updateOne({ datasetId: dataset._id }, { $inc: { position: 1 } }).then((result) => {
+            const element = dataset.jsonArray[position.position + 1];
+            const jsonData = {
+              question: element.question,
+              coordinates: element.coordinates,
+              radiusMeters: element.radiusMeters,
+              type: element.answerType
+            };
+            res.json(jsonData);
+          }).catch((err) => {
+            console.log(err);
+            res.sendStatus(500);
+          });
+
+        }
+        res.sendStatus(406);
+      } else {
+        res.sendStatus(500);
+      }
+    }
+    ).catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+  });
+});
+
+app.get('/play', (req, res) => {
+  Dataset.findById(req.query.id).then((dataset) => {
+    if (dataset != null) {
+      Position.findOne({ datasetId: dataset._id }).then((position) => {
+        if (position != null) {
+          const element = dataset.jsonArray[position.position];
+          const jsonData = {
+            question: element.question,
+            coordinates: element.coordinates,
+            radiusMeters: element.radiusMeters,
+            type: element.answerType
+          };
+          const jsonDataString = JSON.stringify(jsonData);
+          res.render(__dirname + '/html/suche', { jsonData: jsonDataString });
+        } else {
+          const position = new Position({
+            datasetId: dataset._id,
+            position: 0
+          });
+          position.save().then((position) => {
+            const jsonData = dataset.jsonArray[position.position];
+            const jsonDataString = JSON.stringify(jsonData);
+            res.render(__dirname + '/html/suche', { jsonData: jsonDataString });
+          }).catch((err) => {
+            console.log(err);
+            res.redirect('/dashboard');
+          });
+        }
+      }).catch((err) => { });
+    } else {
+      res.send("Dataset not found");
+    }
+  }).catch((err) => {
+    console.log(err);
+    res.redirect('/dashboard');
+  });
+});
+app.get('/js/suche.js', (req, res) => {
+  res.sendFile(__dirname + '/js/suche.js');
+});
+app.get('/style/play.css', (req, res) => {
+  res.sendFile(__dirname + '/style/suche.css');
 });
 
 // assign port

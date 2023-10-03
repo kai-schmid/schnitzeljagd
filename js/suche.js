@@ -1,29 +1,38 @@
 var antwortDiv = document.getElementById("answer-input");
-var object = {
-    "question": "Was ist die Hauptstadt von Deutschland?",
-    "answer": "Berlin",
-    "type": "text",
-    "location": {
-        "latitude": 52.520008,
-        "longitude": 13.404954
-    },
-    "radiusMeters": 10
-};
+//get the query string from the url
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const id = urlParams.get('id')
+
+var object = null;
 init();
 function init() {
+    object = JSON.parse(document.getElementById('json-data').textContent);
     antwortDiv.style.display = "none";
+    document.getElementById("questionPromt").innerText = object.question;
     input(object.type);
     getLocation();
 }
 
 function checkAnswer() {
     var cleanedAnswer = cleanInput();
-    var answer = object.answer.toLocaleLowerCase().replace(/\s+/g, "");
-    if (cleanedAnswer == answer) {
-        document.getElementById("message").innerHTML = "Richtig!";
-    } else {
-        document.getElementById("message").innerHTML = "Falsch!";
-    }
+    antwortDiv = document.getElementById("answer-input");
+    fetch('/api/checkAnswer?id=' + id + "&answer=" + cleanedAnswer, {}).then((res) => {
+        if (res.status === 200) {
+            try{
+                object = JSON.parse(res.jsonData);
+                init();
+            }catch(err){
+                console.log(err);
+            }
+            
+        } else {
+            alert("Fehler beim Löschen");
+        }
+    }).catch((err) => {
+        console.log(err);
+        document.getElementById("message").innerHTML = "Fehler beim überprüfen!";
+    });
 }
 function getLocation() {
     if (navigator.geolocation) {
@@ -35,8 +44,8 @@ function getLocation() {
 function monitorPosition(position) {
     var userLatitude = position.coords.latitude;
     var userLongitude = position.coords.longitude;
-    var targetLatitude = object.location.latitude;
-    var targetLongitude = object.location.longitude;
+    var targetLatitude = object.coordinates.latitude;
+    var targetLongitude = object.coordinates.longitude;
     var radiusMeters = object.radiusMeters + position.coords.accuracy;
     if (isWithinRadius(userLatitude, userLongitude, targetLatitude, targetLongitude, radiusMeters)){
         antwortDiv.style.display = "block";
@@ -59,7 +68,8 @@ function input(type) {
         document.getElementById("input").innerHTML = '<input type="time" id="answer" oninput="cleanInput()">';
     } else if (type == "datetime-local") {
         document.getElementById("input").innerHTML = '<input type="datetime-local" id="answer" oninput="cleanInput()">';
-    } else if (type == "email") {
+    }
+    else if (type == "email") {
         document.getElementById("input").innerHTML = '<input type="email" id="answer" oninput="cleanInput()">';
     } else if (type == "month") {
         document.getElementById("input").innerHTML = '<input type="month" id="answer" oninput="cleanInput()">';

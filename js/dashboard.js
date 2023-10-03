@@ -21,11 +21,13 @@ function init() {
 }
 function generateList() {
     var list = document.getElementById("jsonList");
+    const urlBase = window.location.href.split("/");
     listDatasets.forEach((element, index) => {
+        const url = urlBase[0] + "//" + urlBase[2]+"/play?id="+element._id;
         const div = document.createElement("div");
         div.innerHTML = `
                     <div>
-                     Link zum Teilen:  ${element._id}:
+                     Link zum Teilen:  <a href="${url}" target="_blank">${url}</a>
                      </div>
                     <div>
                         Name: ${element.name}
