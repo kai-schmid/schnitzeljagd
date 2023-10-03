@@ -2,14 +2,10 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const JSONData = new Schema({
+const Dataset = new Schema({
     name: {
         type: String,
-        required: true,
-    },
-    id: {
-        type: Number,
-        unique: true,
+        unique: false,
         required: true,
     },
     jsonArray: {
@@ -18,9 +14,9 @@ const JSONData = new Schema({
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'User'
     }
 
 });
 
-module.exports = mongoose.model('JSONData', JSONData, 'JSONData');
+module.exports = mongoose.model('Dataset', Dataset, 'Dataset');

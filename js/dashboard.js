@@ -1,24 +1,25 @@
 var listDatasets = [
     {
-        name: "Test 1",
-        _id: "1"
+        name: null,
+        _id: null
     },
     {
-        name: "Test 2",
-        _id: "2"
+        name: null,
+        _id: null
     },
     {
-        name: "Test 3",
-        _id: "3"
+        name: null,
+        _id: null
     }
 ];
 
 init();
 
 function init() {
-generateList();
+    listDatasets = JSON.parse(document.getElementById('json-data').textContent);
+    generateList();
 }
-function generateList(){
+function generateList() {
     var list = document.getElementById("jsonList");
     listDatasets.forEach((element, index) => {
         const div = document.createElement("div");
@@ -35,10 +36,10 @@ function generateList(){
         jsonList.appendChild(div);
     });
 }
-function edit(index, id){
+function edit(index, id) {
     window.location.href = "/html/editJSON?id=" + id;
 }
-function deleteGame(index, id){
+function deleteGame(index, id) {
     fetch('/api/deleteDataset', {
         method: 'DELETE',
         headers: {
@@ -58,7 +59,11 @@ function deleteGame(index, id){
     });
 }
 
-function addElement(){
+function addElement() {
     const gameName = document.getElementById("gameName").value;
-    window.location.href = "/html/newDataset?name=" + gameName;
+    if (gameName === "" || gameName === null || gameName === undefined) {
+        alert("Bitte Namen eingeben");
+        return;
+    }
+    window.location.href = "/api/newDataset?name=" + gameName;
 }

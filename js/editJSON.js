@@ -1,7 +1,7 @@
 var json = {
-    userId: null,
+    user: null,
     name: null,
-    id: null,
+    _id: null,
     jsonArray: []
 }
 var jsonArray = json.jsonArray;
@@ -94,6 +94,7 @@ function displayJsonList() {
                 `;
         jsonList.appendChild(div);
     });
+    saveDataset();
 }
 
 let editingIndex = -1; // Variable, um den Index des gerade bearbeiteten Elements zu speichern
@@ -211,6 +212,28 @@ function downloadJson() {
     a.click();
 
     URL.revokeObjectURL(url);
+}
+
+function saveDataset() {
+    json.jsonArray = jsonArray;
+    console.log(json);
+    fetch('/api/saveDataset', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            
+        },
+        body: JSON.stringify(json)
+    }).then((res) => {
+        if (res.status === 200) {
+            console.log("Erfolgreich gespeichert");
+        } else {
+            alert("Fehler beim Speichern");
+        }
+    }).catch((err) => {
+        console.log(err);
+        alert("Fehler beim Speichern");
+    });
 }
 
 // Anzeigen der vorhandenen Informationen beim Laden der Seite

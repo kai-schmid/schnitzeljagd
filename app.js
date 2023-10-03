@@ -4,7 +4,8 @@ const session = require('express-session');  // session middleware
 const passport = require('passport');  // authentication
 const connectEnsureLogin = require('connect-ensure-login');// authorization
 
-const User = require('./express/user'); // User Model 
+const User = require('./express/user'); // User Model
+const Dataset = require('./express/dataset'); // Dataset Model
 
 const app = express();
 
@@ -16,6 +17,10 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
+}));
+
+app.use(express.json({
+  type: ['application/json', 'text/plain']
 }));
 
 // Configure Middleware
@@ -42,7 +47,22 @@ app.get('/login', (req, res) => {
 
 // Route to Dashboard
 app.get('/dashboard', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  res.render(__dirname + '/html/dashboard', { user: req.user.username, session: req.session, sessionID: req.sessionID });
+  
+  Dataset.find({ user: req.user._id },{name:1, user:1, _id:1}).then((dataset) => {
+    var jsonData = [];
+    if(dataset.length > 0){
+      jsonData = dataset;
+    }
+    else{
+      jsonData = [];
+    }
+    const jsonDataString = JSON.stringify(jsonData);
+    res.render(__dirname + '/html/dashboard', { user: req.user.username, session: req.session, sessionID: req.sessionID, jsonData: jsonDataString});
+  }).catch((err) => {
+    console.log(err);
+    const jsonDataString = "[]";
+    res.render(__dirname + '/html/dashboard', { user: req.user.username, session: req.session, sessionID: req.sessionID, jsonData: jsonDataString});
+  });
 });
 
 app.get('/js/dashboard.js', (req, res) => {
@@ -50,11 +70,6 @@ app.get('/js/dashboard.js', (req, res) => {
 });
 app.get('/style/dashboard.css', (req, res) => {
   res.sendFile(__dirname + '/style/dashboard.css');
-});
-
-// Route to Secret Page
-app.get('/secret', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  res.sendFile(__dirname + '/html/secret-page.html');
 });
 
 // Route to Log out
@@ -84,11 +99,11 @@ app.post('/register', (req, res) => {
     res.redirect('/login');
   });
 });
-app.get('/html/editJson', (req, res) => {
+app.get('/html/editJson', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   var jsonData = {
     name: "test",
     userId: 123,
-    id: null,
+    _id: null,
     jsonArray: [
       {
         "question": "test",
@@ -109,11 +124,46 @@ app.get('/html/editJson', (req, res) => {
   res.render(__dirname +'/html/editJson', { jsonData: jsonDataString });
 });
 
-app.get('/js/editJson.js', (req, res) => {
+app.get('/api/newDataset', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  const dataset = new Dataset({
+    name: req.query.name,
+    jsonArray: [],
+    user: req.user._id,
+  });
+  const jsonData = {
+    name: dataset.name,
+    userId: dataset.user,
+    _id: dataset._id,
+    jsonArray: dataset.jsonArray
+  };
+  dataset.save().then((dataset) => {
+    res.render(__dirname + '/html/editJson', { jsonData: JSON.stringify(jsonData) });
+  }).catch((err) => {
+    console.log("New Datset error: " + err);
+    res.redirect('/dashboard');
+  });
+});
+
+app.post('/api/saveDataset', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  console.log(req.body);
+  const dataset = req.body;
+  Dataset.updateOne({ _id: dataset._id }, { $set: { name: dataset.name, jsonArray: dataset.jsonArray } }).then((result) => {
+    res.sendStatus(200);
+  }).catch((err) => {
+    console.log(err);
+    res.sendStatus(500);
+  });
+});
+
+app.get('/js/editJson.js', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   res.sendFile(__dirname + '/js/editJson.js');
 });
-app.get('/style/editJson.css', (req, res) => {
+app.get('/style/editJson.css',connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   res.sendFile(__dirname + '/style/editJson.css');
+});
+
+app.get('/style/index.css', (req, res) => {
+  res.sendFile(__dirname + '/style/index.css');
 });
 
 // assign port

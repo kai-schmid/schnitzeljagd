@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JSON Viewer and Editor</title>
     <link rel="stylesheet" href="../style/dashboard.css">
+    <link rel="stylesheet" href="../style/index.css">
     <script defer src="../js/dashboard.js"></script>
 </head>
 <body>
@@ -15,6 +16,7 @@
     </div>
     <input type="text" id="gameName" placeholder="Name des neuen Spiels?">
     <button onclick="addElement()">Neues Spiel erstellen</button>
+    <pre id="json-data"><%= jsonData %></pre>
 </body>
 <footer>
     <%- include('partials/footer'); %>
