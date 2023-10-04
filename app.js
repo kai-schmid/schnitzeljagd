@@ -141,7 +141,8 @@ app.get('/api/newDataset', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   });
   dataset.save().then((dataset) => {
     position.save().then((position) => { }).catch((err) => { }).finally(() => {
-      res.render(__dirname + '/html/editJson', { jsonData: JSON.stringify(jsonData) });
+      res.redirect('/html/editJson?id=' + dataset._id);
+      //res.render(__dirname + '/html/editJson', { jsonData: JSON.stringify(jsonData) });
     });
 
   }).catch((err) => {
