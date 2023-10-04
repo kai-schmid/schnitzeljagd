@@ -93,12 +93,12 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-  User.register({ username: req.body.username, active: false }, req.body.password, function (err, user) {
-    if (err) {
-      console.log(err);
-      return res.redirect('/register');
-    }
+  console.log(req.body);
+  User.register({ username: req.body.username, active: false }, req.body.password.toString()).then((user) => {
     res.redirect('/login');
+  }).catch((err) => {
+    console.log(err);
+    return res.redirect('/register');
   });
 });
 app.get('/html/editJson', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
