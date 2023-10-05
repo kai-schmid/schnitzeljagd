@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const express = require('express'); // server software
 const bodyParser = require('body-parser'); // parser middleware
 const session = require('express-session');  // session middleware
