@@ -62,11 +62,11 @@ app.get('/dashboard', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
       jsonData = [];
     }
     const jsonDataString = JSON.stringify(jsonData);
-    res.render(__dirname + '/views/dashboard', { user: req.user.username, session: req.session, sessionID: req.sessionID, jsonData: jsonDataString });
+    res.render('dashboard', { user: req.user.username, session: req.session, sessionID: req.sessionID, jsonData: jsonDataString });
   }).catch((err) => {
     console.log(err);
     const jsonDataString = "[]";
-    res.render(__dirname + '/views/dashboard', { user: req.user.username, session: req.session, sessionID: req.sessionID, jsonData: jsonDataString });
+    res.render('dashboard', { user: req.user.username, session: req.session, sessionID: req.sessionID, jsonData: jsonDataString });
   });
 });
 
@@ -116,7 +116,7 @@ app.get('/views/editJson', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
       // Die JSON-Daten als Zeichenfolge in das HTML-Dokument einfügen
       const jsonDataString = JSON.stringify(jsonData);
       // Die render-Methode übergibt die Zeichenfolge an die HTML-Seite
-      res.render(__dirname + '/views/editJson', { jsonData: jsonDataString });
+      res.render('editJson', { jsonData: jsonDataString });
     } else {
       res.redirect('/dashboard');
     }
@@ -237,7 +237,7 @@ app.get('/play', (req, res) => {
             type: element.answerType
           };
           const jsonDataString = JSON.stringify(jsonData);
-          res.render(__dirname + '/views/suche', { jsonData: jsonDataString });
+          res.render('suche', { jsonData: jsonDataString });
         } else {
           const position = new Position({
             datasetId: dataset._id,
@@ -246,7 +246,7 @@ app.get('/play', (req, res) => {
           position.save().then((position) => {
             const jsonData = dataset.jsonArray[position.position];
             const jsonDataString = JSON.stringify(jsonData);
-            res.render(__dirname + '/views/suche', { jsonData: jsonDataString });
+            res.render('suche', { jsonData: jsonDataString });
           }).catch((err) => {
             console.log(err);
             res.redirect('/dashboard');
