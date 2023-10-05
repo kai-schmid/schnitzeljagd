@@ -15,7 +15,10 @@
   "description": "Eine kleines tool um schnitzeljakten zu digitalisieren",
   "main": "app.js",
   "scripts": {
-    "test": "node app.js"
+    "test": "node app.js",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "debug": "DEBUG=schnitzeljagt:* nodemon app.js"
   },
   "author": "Kai Schmid",
   "license": "Apache-2.0"

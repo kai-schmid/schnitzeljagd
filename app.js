@@ -116,6 +116,7 @@ app.get('/views/editJson', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
       };
       // Die JSON-Daten als Zeichenfolge in das HTML-Dokument einfügen
       const jsonDataString = JSON.stringify(jsonData);
+      console.log(jsonDataString);
       // Die render-Methode übergibt die Zeichenfolge an die HTML-Seite
       res.render('editJson.ejs', { jsonData: jsonDataString });
     } else {
