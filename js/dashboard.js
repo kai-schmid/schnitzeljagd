@@ -40,7 +40,7 @@ function generateList() {
 }
 function edit(index, id) {
     console.log("Element wird "+ index +" bearbeitet.");
-    window.location.href = "/html/editJSON?id=" + id;
+    window.location.href = "/views/editJSON?id=" + id;
 }
 function deleteGame(index, id) {
     fetch('/api/deleteDataset', {
