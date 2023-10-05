@@ -13,6 +13,7 @@ const Position = require('./express/position'); // Position Model
 
 const app = express();
 
+app.set('views', __dirname + '/html')
 app.set('view engine', 'ejs');
 
 // Configure Sessions Middleware
