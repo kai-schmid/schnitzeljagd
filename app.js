@@ -5,6 +5,7 @@ const bodyParser = require('body-parser'); // parser middleware
 const session = require('express-session');  // session middleware
 const passport = require('passport');  // authentication
 const connectEnsureLogin = require('connect-ensure-login');// authorization
+var path = require('path'); // path module
 
 // Database
 const User = require('./express/user'); // User Model
@@ -13,7 +14,7 @@ const Position = require('./express/position'); // Position Model
 
 const app = express();
 
-app.set('views', __dirname + '/views')
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // Configure Sessions Middleware
@@ -116,7 +117,7 @@ app.get('/views/editJson', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
       // Die JSON-Daten als Zeichenfolge in das HTML-Dokument einfügen
       const jsonDataString = JSON.stringify(jsonData);
       // Die render-Methode übergibt die Zeichenfolge an die HTML-Seite
-      res.render('editJson', { jsonData: jsonDataString });
+      res.render('editJson.ejs', { jsonData: jsonDataString });
     } else {
       res.redirect('/dashboard');
     }
