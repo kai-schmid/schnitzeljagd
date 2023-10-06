@@ -105,7 +105,7 @@ app.post('/register', (req, res) => {
     return res.redirect('/register');
   });
 });
-app.get('/views/editJson', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+app.get('/views/editJSON', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   Dataset.findById(req.query.id).then((dataset) => {
     if (dataset != null) {
       jsonData = {
@@ -146,7 +146,7 @@ app.get('/api/newDataset', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
   });
   dataset.save().then((dataset) => {
     position.save().then((position) => { }).catch((err) => { }).finally(() => {
-      res.redirect('/views/editJson?id=' + dataset._id);
+      res.redirect('/views/editJSON?id=' + dataset._id);
       //res.render(__dirname + '/views/editJson', { jsonData: JSON.stringify(jsonData) });
     });
 
@@ -177,11 +177,11 @@ app.delete('/api/deleteDataset', connectEnsureLogin.ensureLoggedIn(), (req, res)
   });
 });
 
-app.get('/js/editJson.js', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  res.sendFile(__dirname + '/js/editJson.js');
+app.get('/js/editJSON.js', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  res.sendFile(__dirname + '/js/editJSON.js');
 });
-app.get('/style/editJson.css', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
-  res.sendFile(__dirname + '/style/editJson.css');
+app.get('/style/editJSON.css', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  res.sendFile(__dirname + '/style/editJSON.css');
 });
 
 app.get('/style/index.css', (req, res) => {
