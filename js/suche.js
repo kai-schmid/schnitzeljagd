@@ -47,7 +47,7 @@ function monitorPosition(position) {
     var userLongitude = position.coords.longitude;
     var targetLatitude = object.coordinates.latitude;
     var targetLongitude = object.coordinates.longitude;
-    var radiusMeters = object.radiusMeters + position.coords.accuracy;
+    var radiusMeters = parseFloat(object.radiusMeters) + parseFloat(position.coords.accuracy);
     if (isWithinRadius(userLatitude, userLongitude, targetLatitude, targetLongitude, radiusMeters)){
         antwortDiv.style.display = "block";
     }
@@ -132,5 +132,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 // Funktion zur Überprüfung der Entfernung zum Ziel
 function isWithinRadius(userLat, userLon, targetLat, targetLon, radiusMeters) {
     const distance = calculateDistance(userLat, userLon, targetLat, targetLon);
+    console.log(radiusMeters);
+    console.log(distance);
     return distance <= radiusMeters;
 }
