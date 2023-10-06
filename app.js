@@ -204,7 +204,7 @@ app.get('/api/answer', (req, res) => {
           Position.updateOne({ datasetId: dataset._id }, { $inc: { position: 1 } }).then((result) => {
             const element = dataset.jsonArray[position.position + 1];
             const jsonData = {
-              
+
               question: element.question,
               coordinates: element.coordinates,
               radiusMeters: element.radiusMeters,
@@ -216,8 +216,9 @@ app.get('/api/answer', (req, res) => {
             res.sendStatus(500);
           });
 
+        } else {
+          res.sendStatus(406);
         }
-        res.sendStatus(406);
       } else {
         res.sendStatus(500);
       }
@@ -271,6 +272,50 @@ app.get('/js/suche.js', (req, res) => {
 });
 app.get('/style/suche.css', (req, res) => {
   res.sendFile(__dirname + '/style/suche.css');
+});
+
+app.get('/api/reset', (req, res) => {
+  Dataset.findById(req.query.id).then((dataset) => {
+    Position.findOne({ datasetId: dataset._id }).then((position) => {
+      if (position != null) {
+        Position.updateOne({ datasetId: dataset._id }, { position: 0 }).then((result) => {
+          res.sendStatus(200);
+        }).catch((err) => {
+          console.log(err);
+          res.sendStatus(500);
+        });
+
+      } else {
+        res.sendStatus(406);
+      }
+    }
+    ).catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+  });
+});
+
+app.get('/api/set', (req, res) => {
+  Dataset.findById(req.query.id).then((dataset) => {
+    Position.findOne({ datasetId: dataset._id }).then((position) => {
+      if (position != null) {
+        Position.updateOne({ datasetId: dataset._id }, { position: req.query.count }).then((result) => {
+          res.sendStatus(200);
+        }).catch((err) => {
+          console.log(err);
+          res.sendStatus(500);
+        });
+
+      } else {
+        res.sendStatus(406);
+      }
+    }
+    ).catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+  });
 });
 
 // assign port
