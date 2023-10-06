@@ -118,7 +118,7 @@ app.get('/views/editJson', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
       const jsonDataString = JSON.stringify(jsonData);
       console.log(jsonDataString);
       // Die render-Methode übergibt die Zeichenfolge an die HTML-Seite
-      res.render('editJson', { jsonData: jsonDataString });
+      res.render(__dirname +'/views/editJson.ejs', { jsonData: jsonDataString });
     } else {
       res.redirect('/dashboard');
     }
