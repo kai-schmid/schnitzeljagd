@@ -10,6 +10,7 @@ function init() {
     object = JSON.parse(document.getElementById('json-data').textContent);
     antwortDiv.style.display = "none";
     document.getElementById("questionPromt").innerText = object.question;
+    document.getElementById("positionnoteText").innerText = object.positionnote;
     input(object.type);
     getLocation();
 }
