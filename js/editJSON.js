@@ -15,6 +15,7 @@ function init() {
 }
 
 function addToJsonArray() {
+    const positionnote = document.getElementById("positionnote").value;
     const question = document.getElementById("question").value;
     const latitudeText = document.getElementById("latitude").value.replace(',', '.'); // Umwandlung des Kommas in einen Punkt
     const longitudeText = document.getElementById("longitude").value.replace(',', '.'); // Umwandlung des Kommas in einen Punkt
@@ -25,11 +26,12 @@ function addToJsonArray() {
     const radiusMeters = document.getElementById("radiusMeters").value;
 
     // Validierung der Eingaben
-    if (!validateInputs(question, answers, latitude, longitude, radiusMeters)) {
+    if (!validateInputs(positionnote, question, answers, latitude, longitude, radiusMeters)) {
         return;
     }
 
     const newElement = {
+        positionnote,
         question,
         coordinates: { latitude, longitude },
         answers,
@@ -40,6 +42,7 @@ function addToJsonArray() {
     jsonArray.push(newElement);
 
     // Zurücksetzen der Eingabefelder
+    document.getElementById("positionnote").value = "";
     document.getElementById("question").value = "";
     document.getElementById("latitude").value = "";
     document.getElementById("longitude").value = "";
@@ -51,12 +54,12 @@ function addToJsonArray() {
 }
 
 
-function validateInputs(question, answers, latitude, longitude, radiusMeters) {
+function validateInputs(positionnote, question, answers, latitude, longitude, radiusMeters) {
     let isValid = true;
     const errorText = document.getElementById("errorText");
     errorText.textContent = "";
 
-    if (!question || !answers || isNaN(latitude) || isNaN(longitude) || isNaN(radiusMeters)) {
+    if (!positionnote || !question || !answers || isNaN(latitude) || isNaN(longitude) || isNaN(radiusMeters)) {
         errorText.textContent = "Bitte füllen Sie alle Felder korrekt aus.";
         isValid = false;
     } else if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
@@ -79,6 +82,9 @@ function displayJsonList() {
                     <div>
                      Station ${index + 1}:
                      </div>
+                     <div>
+                     Positionshinweis: ${element.positionnote}
+                    </div>
                     <div>
                         Frage: ${element.question}
                     </div>
@@ -108,13 +114,15 @@ function editJson(index) {
     editingIndex = index;
 
     const element = jsonArray[index];
-    const questionDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(1)`);
-    const latitudeDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(2)`);
-    const longitudeDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(3)`);
-    const answersDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(4)`);
-    const answerTypeDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(5)`);
-    const answerRadiusMetersDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(6)`);
+    const positionnoteDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(1)`);
+    const questionDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(2)`);
+    const latitudeDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(3)`);
+    const longitudeDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(4)`);
+    const answersDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(5)`);
+    const answerTypeDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(6)`);
+    const answerRadiusMetersDiv = document.querySelector(`#jsonList div:nth-child(${index + 1}) div:nth-child(7)`);
 
+    positionnoteDiv.innerHTML = `<input type="text" id="editedPositionnote" value="${element.positionnote}">`;
     questionDiv.innerHTML = `<input type="text" id="editedQuestion" value="${element.question}">`;
     latitudeDiv.innerHTML = `<input type="text" id="editedLatitude" value="${element.coordinates.latitude}">`;
     longitudeDiv.innerHTML = `<input type="text" id="editedLongitude" value="${element.coordinates.longitude}">`;
@@ -127,7 +135,7 @@ function editJson(index) {
         `;
     answerRadiusMetersDiv.innerHTML = `<input type="number" id="editedRadiusMeters" value="${element.radiusMeters}">`;
 
-    const editButton = document.querySelector(`#jsonList div:nth-child(${index + 1}) button:nth-child(7)`);
+    const editButton = document.querySelector(`#jsonList div:nth-child(${index + 1}) button:nth-child(8)`);
     editButton.innerHTML = "Speichern";
     editButton.onclick = saveJson;
 }
@@ -135,6 +143,7 @@ function editJson(index) {
 function saveJson() {
     if (editingIndex === -1) return;
 
+    const editedPositionnote = document.getElementById("editedPositionnote").value;
     const editedQuestion = document.getElementById("editedQuestion").value;
     const editedLatitude = document.getElementById("editedLatitude").value;
     const editedLongitude = document.getElementById("editedLongitude").value;
@@ -143,6 +152,7 @@ function saveJson() {
     const editedRadiusMeters = document.getElementById("editedRadiusMeters").value;
 
     const editedElement = {
+        positionnote: editedPositionnote,
         question: editedQuestion,
         coordinates: { latitude: editedLatitude, longitude: editedLongitude },
         answers: editedAnswers,

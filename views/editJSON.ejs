@@ -18,6 +18,11 @@
     <button onclick="loadJson()">JSON hochladen</button>
 
     <div>
+        <label for="positionnote">Positionshinweis:</label>
+        <input type="text" id="positionnote">
+    </div>
+
+    <div>
         <label for="question">Frage:</label>
         <input type="text" id="question">
     </div>
@@ -36,7 +41,6 @@
         <label for="answerType">Antworttyp:</label>
         <select id="answerType" onchange="changeAnswerType(this.value);">
             <option value="text">Text</option>
-            <option value="multipleChoice">Multiple Choice</option>
             <option value="number">Zahl</option>
             <option value="date">Datum</option>
             <option value="time">Uhrzeit</option>
@@ -45,7 +49,7 @@
     </div>
 
     <div>
-        <label for="answers">Antworten (durch Kommas getrennt: nur Text und Multiple Choice!):</label>
+        <label for="answers">Antworten (durch Kommas getrennt: nur Text):</label>
         <input type="text" id="answers">
     </div>
 
@@ -67,6 +71,7 @@
     </details>
 
     <button onclick="downloadJson()">JSON herunterladen</button>
+    <br><br><br><br><br><br><br>
 
     <pre id="json-data"><%= jsonData %></pre>
 </body>
