@@ -19,26 +19,30 @@
         <img src="pfad_zum_bild.jpg" alt="Bild der Schatzsuche">
     </div>
 
-    <div id="question">
-        <p>Hier ist deine Frage:</p>
-        <p id="questionPromt"></p>
-    </div>
+    <div id="positionnote">
+        <p id="positionnotePromt">Euer Positionshinweis:</p>
+        <p id="positionnoteText"></p>
 
-    <div id="answer-input">
-        <label for="answer">Antwort eingeben:</label>
-        <div id="input">
+        <div id="answer-input">
 
-        </div>
-        <div id="result">
-            <p id="message"></p>
-        </div>
-        <div id="button">
-            <button onclick="checkAnswer()">Antwort überprüfen</button>
-        </div>
-    </div>
+            <div id="question">
+                <p>Hier ist deine Frage:</p>
+                <p id="questionPromt"></p>
+            </div>
+            <label for="answer">Antwort eingeben:</label>
+            <div id="input">
 
-    <pre id="json-data"><%= jsonData %></pre>
-    
+            </div>
+            <div id="result">
+                <p id="message"></p>
+            </div>
+            <div id="button">
+                <button onclick="checkAnswer()">Antwort überprüfen</button>
+            </div>
+        </div>
+
+        <pre id="json-data"><%= jsonData %></pre>
+
 </body>
 
 </html>

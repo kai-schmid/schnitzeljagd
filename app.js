@@ -193,8 +193,10 @@ app.get('/api/answer', (req, res) => {
     Position.findOne({ datasetId: dataset._id }).then((position) => {
       let rightAnswer = false;
       if (position != null) {
-        dataset.jsonArray.forEach(element => {
-          if (element.answer.toLocaleLowerCase().replace(/\s+/g, "") = req.query.answer.toLocaleLowerCase().replace(/\s+/g, "")) {
+        dataset.jsonArray[position.position].answers.forEach(element => {
+          console.log(element);
+          console.log(req.query.answer);
+          if (element.toLowerCase().replace(/\s+/g, "") == req.query.answer.toLowerCase().replace(/\s+/g, "")) {
             rightAnswer = true;
           }
         });
@@ -266,7 +268,7 @@ app.get('/play', (req, res) => {
 app.get('/js/suche.js', (req, res) => {
   res.sendFile(__dirname + '/js/suche.js');
 });
-app.get('/style/play.css', (req, res) => {
+app.get('/style/suche.css', (req, res) => {
   res.sendFile(__dirname + '/style/suche.css');
 });
 

@@ -17,7 +17,7 @@ function init() {
 function checkAnswer() {
     var cleanedAnswer = cleanInput();
     antwortDiv = document.getElementById("answer-input");
-    fetch('/api/checkAnswer?id=' + id + "&answer=" + cleanedAnswer, {}).then((res) => {
+    fetch('/api/answer?id=' + id + "&answer=" + cleanedAnswer, {}).then((res) => {
         if (res.status === 200) {
             try{
                 object = JSON.parse(res.jsonData);
@@ -27,7 +27,7 @@ function checkAnswer() {
             }
             
         } else {
-            alert("Fehler beim Löschen");
+            alert("Leider ist die antwort falsch!");
         }
     }).catch((err) => {
         console.log(err);
