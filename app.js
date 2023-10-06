@@ -118,7 +118,7 @@ app.get('/views/editJson', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
       const jsonDataString = JSON.stringify(jsonData);
       console.log(jsonDataString);
       // Die render-Methode übergibt die Zeichenfolge an die HTML-Seite
-      res.render('editJson.ejs', { jsonData: jsonDataString });
+      res.render('editJson', { jsonData: jsonDataString });
     } else {
       res.redirect('/dashboard');
     }
@@ -204,6 +204,7 @@ app.get('/api/answer', (req, res) => {
           Position.updateOne({ datasetId: dataset._id }, { $inc: { position: 1 } }).then((result) => {
             const element = dataset.jsonArray[position.position + 1];
             const jsonData = {
+              
               question: element.question,
               coordinates: element.coordinates,
               radiusMeters: element.radiusMeters,
