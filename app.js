@@ -204,7 +204,7 @@ app.get('/api/answer', (req, res) => {
           Position.updateOne({ datasetId: dataset._id }, { $inc: { position: 1 } }).then((result) => {
             const element = dataset.jsonArray[position.position + 1];
             const jsonData = {
-
+              positionnote: element.positionnote,
               question: element.question,
               coordinates: element.coordinates,
               radiusMeters: element.radiusMeters,
@@ -237,6 +237,7 @@ app.get('/play', (req, res) => {
         if (position != null) {
           const element = dataset.jsonArray[position.position];
           const jsonData = {
+            positionnote: element.positionnote,
             question: element.question,
             coordinates: element.coordinates,
             radiusMeters: element.radiusMeters,
