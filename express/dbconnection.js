@@ -8,6 +8,8 @@ const database_password = process.env.DATABASE_PASSWORD || '';
 
 const database_url_with_credentials = database_user && database_password ? `mongodb://${database_user}:${database_password}@${database_url}:${database_port}/${database_name}` : `mongodb://${database_url}:${database_port}/${database_name}`;
 
+console.log(`Verbinde mit Datenbank ${database_url_with_credentials}`);
+
 mongoose.connect(database_url_with_credentials, {
   useNewUrlParser: true,
   useUnifiedTopology: true
