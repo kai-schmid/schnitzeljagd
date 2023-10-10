@@ -16,14 +16,17 @@ RUN npm install
 COPY . .
 
 # install MongoDB
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get -y install systemctl
-RUN wget security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.1_1.1.1n-0+deb11u5_amd64.deb
-RUN dpkg -i libssl1.1_1.1.1n-0+deb11u5_amd64.deb
-RUN apt-get install curl apt-transport-https software-properties-common gnupg2 -y
-RUN wget -qO - https://pgp.mongodb.com/server-7.0.asc | apt-key add -
-RUN echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/7.0 main" | tee /etc/apt/sources.list.d/mongodb-org.list
-RUN apt-get -y update
-RUN apt-get update && apt-get install mongodb-org -y
+#RUN apt-get update && apt-get upgrade -y
+#RUN apt-get -y install systemctl
+#RUN wget security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.1_1.1.1n-0+deb11u5_amd64.deb
+#RUN dpkg -i libssl1.1_1.1.1n-0+deb11u5_amd64.deb
+#RUN apt-get install curl apt-transport-https software-properties-common gnupg2 -y
+#RUN wget -qO - https://pgp.mongodb.com/server-7.0.asc | apt-key add -
+#RUN echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/7.0 main" | tee /etc/apt/sources.list.d/mongodb-org.list
+#RUN apt-get -y update
+#RUN apt-get update && apt-get install mongodb-org -y
+#RUN systemctl start mongod
+#RUN systemctl enable mongod
+
+CMD ["node", "app.js"]
 EXPOSE 3000
-CMD [ "node", "app.js", "&&", "systemctl", "start mongod", "&&", "systemctl", "enable mongod" ]

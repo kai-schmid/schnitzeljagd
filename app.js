@@ -7,6 +7,8 @@ const passport = require('passport');  // authentication
 const connectEnsureLogin = require('connect-ensure-login');// authorization
 var path = require('path'); // path module
 
+const port = process.env.SERVER_PORT || 3000;
+
 // Database
 const User = require('./express/user'); // User Model
 const Dataset = require('./express/dataset'); // Dataset Model
@@ -320,5 +322,5 @@ app.get('/api/set', (req, res) => {
 });
 
 // assign port
-const port = 3000;
+//const port = 3000;
 app.listen(port, () => console.log(`This app is listening on port ${port}`));
