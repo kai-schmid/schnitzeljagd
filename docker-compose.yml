@@ -15,7 +15,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: $DATABASE_PASSWORD
       MONGO_INITDB_DATABASE: $DATABASE_NAME
     env_file:
-      - .env  # Hier verwenden wir die .env-Datei, um die Umgebungsvariablen zu laden
+      - environment.env  # Hier verwenden wir die .env-Datei, um die Umgebungsvariablen zu laden
 
   app:
     container_name: schnitzeljagd
@@ -34,7 +34,7 @@ services:
         DATABASE_NAME: $DATABASE_NAME
         DATABASE_PORT: $DATABASE_PORT
     env_file:
-      - .env  # Hier verwenden wir die .env-Datei, um die Umgebungsvariablen zu laden
+      - environment.env  # Hier verwenden wir die .env-Datei, um die Umgebungsvariablen zu laden
     depends_on:
       - mongodb
 
