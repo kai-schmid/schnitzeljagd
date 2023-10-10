@@ -28,7 +28,7 @@ services:
     environment:
         DATABASE_USER: $DATABASE_USER
         DATABASE_PASSWORD: $DATABASE_PASSWORD
-        DATABASE_URL: db
+        DATABASE_URL: mongodb
         DATABASE_NAME: $DATABASE_NAME
         DATABASE_PORT: $DATABASE_PORT
     env_file:
