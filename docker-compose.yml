@@ -12,12 +12,12 @@ services:
         ports:
             - "3000:3000"
         environment:
-           - DATABASE_USER: "username"
-           - DATABASE_PASSWORD: "password"
-           - DATABASE_URL: "db"
-           - DATABASE_NAME: "users"
-           - DATABASE_PORT: "27017"
-           #- SERVER_PORT: "3000"
+           - DATABASE_USER=username
+           - DATABASE_PASSWORD=password
+           - DATABASE_URL=db
+           - DATABASE_NAME=users
+           - DATABASE_PORT=27017
+
 
         depends_on:
         - db
@@ -25,5 +25,5 @@ services:
         image: mongodb/mongodb-community-server:latest
         restart: unless-stopped
         environment:
-           - MONGO_INITDB_ROOT_USERNAME: username
-           - MONGO_INITDB_ROOT_PASSWORD: password
+           - MONGO_INITDB_ROOT_USERNAME=username
+           - MONGO_INITDB_ROOT_PASSWORD=password
