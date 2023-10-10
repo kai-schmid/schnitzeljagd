@@ -24,8 +24,6 @@ services:
     db:
         image: mongodb/mongodb-community-server:latest
         restart: unless-stopped
-        networks:
-            - mynetwork
         environment:
             MONGO_INITDB_ROOT_USERNAME: username
             MONGO_INITDB_ROOT_PASSWORD: password
