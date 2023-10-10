@@ -5,7 +5,7 @@ services:
   mongodb:
     image: mongodb/mongodb-community-server:latest
     restart: unless-stopped
-    container_name: mongodb
+    container_name: mongodb_suche
     ports:
       - "27017:27017"
     volumes:
