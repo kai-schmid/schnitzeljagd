@@ -19,9 +19,10 @@ function checkAnswer() {
     var cleanedAnswer = cleanInput();
     antwortDiv = document.getElementById("answer-input");
     fetch('/api/answer?id=' + id + "&answer=" + cleanedAnswer, {}).then((res) => {
+        console.log(res);
         if (res.status === 200) {
             try{
-                object = JSON.parse(res.jsonData);
+                object = res.json();
                 init();
             }catch(err){
                 console.log(err);

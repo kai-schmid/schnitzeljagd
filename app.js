@@ -191,7 +191,9 @@ app.get('/style/index.css', (req, res) => {
 });
 
 app.get('/api/answer', (req, res) => {
+  var set;
   Dataset.findById(req.query.id).then((dataset) => {
+    set  = dataset.jsonArray;
     Position.findOne({ datasetId: dataset._id }).then((position) => {
       let rightAnswer = false;
       if (position != null) {
@@ -212,9 +214,8 @@ app.get('/api/answer', (req, res) => {
               radiusMeters: element.radiusMeters,
               type: element.answerType
             };
+            
             res.json(jsonData);
-            res.status(200);
-            res.send();
           }).catch((err) => {
             console.log(err);
             res.sendStatus(500);
