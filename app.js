@@ -213,6 +213,8 @@ app.get('/api/answer', (req, res) => {
               type: element.answerType
             };
             res.json(jsonData);
+            res.status(200);
+            res.send();
           }).catch((err) => {
             console.log(err);
             res.sendStatus(500);
@@ -319,6 +321,10 @@ app.get('/api/set', (req, res) => {
       res.sendStatus(500);
     });
   });
+});
+
+app.get('/js/map.js', (req, res) => {
+  res.sendFile(__dirname + '/js/map.js');
 });
 
 // assign port
