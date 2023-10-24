@@ -27,13 +27,19 @@ function generateList() {
         const div = document.createElement("div");
         div.innerHTML = `
                     <div>
-                     Link zum Teilen:  <a href="${url}" target="_blank">${url}</a>
+                     Link zum Teilen:  <br><a href="${url}" target="_blank">${url}</a>
                      </div>
                     <div>
                         Name: ${element.name}
                     </div>
                     <button onclick="edit(${index},'${element._id}');">Bearbeiten</button>
                     <button onclick="deleteGame(${index},'${element._id}')">Löschen</button>
+                    <button onclick="window.location.href = '/play?id=${element._id}'">Spielen</button>
+                    <button onclick="navigator.clipboard.writeText('${url}');">Teilen</button>
+                    <button onclick="fetchReset('${element._id}')">Zurücksetzen</button>
+                    <input type="number" id="number${index}" value="1">
+                    <button onclick="fetchSetTo('${element._id}', document.getElementById('number${index}').value)">Setzen</button>
+
                 `;
         jsonList.appendChild(div);
     });
@@ -42,7 +48,43 @@ function edit(index, id) {
     console.log("Element wird "+ index +" bearbeitet.");
     window.location.href = "/views/editJSON?id=" + id;
 }
+
+function fetchReset(id) {
+    fetch('/api/reset?id='+id, {
+        method: 'GET'
+    }).then((res) => {
+        if (res.status === 200) {
+            alert("Zurückgesetzt");
+        } else {
+            alert("Fehler beim Zurücksetzen");
+        }
+    }).catch((err) => {
+        console.log(err);
+    });
+}
+
+function fetchSetTo(id, number) {
+    if(number === "" || number === null || number === undefined || isNaN(number)) {
+        alert("Bitte eine Zahl eingeben");
+        return;
+    }
+    fetch('/api/set?id='+id+"&count="+number, {
+        method: 'GET'
+    }).then((res) => {
+        if (res.status === 200) {
+            alert("Gesetzt auf "+number);
+        } else {
+            alert("Fehler beim Setzen");
+        }
+    }).catch((err) => {
+        console.log(err);
+    });
+}
+
 function deleteGame(index, id) {
+    if(!confirm("Soll das Spiel wirklich gelöscht werden?")) {
+        return;
+    }
     fetch('/api/deleteDataset', {
         method: 'DELETE',
         headers: {
